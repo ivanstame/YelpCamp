@@ -1,43 +1,52 @@
-   let campsites = [
-       {title: "Indian Garden", image:"https://www.birdandhike.com/Hike/GRCA/Poi-Grca/IG-Camp/photos-igc/S120_11262a.jpg"},
-       {title: "Mount Wilson", image:"https://www.hikespeak.com/img/la/Henninger_Flats/Henninger_Flats_Campgrounds_Altadena_Trail_Camp_4106.jpg"},
-       {title: "June Lake", image:"http://www.californiasbestcamping.com/photos8/gull_lake_campground.jpg"}
-   ]
-
 // GLOBAL VARIABLES
-const express    = require('express'),
-      app        = express(),
-      bodyParser = require('body-parser'),
-      mongoose   = require('mongoose');
+const express               = require('express'),
+      app                   = express(),
+      bodyParser            = require('body-parser'),
+      mongoose              = require('mongoose'),
+      passport              = require('passport'),
+      LocalStrategy         = require('passport-local'),
+      Campground            = require('./models/campgrounds'),
+      Comment               = require('./models/comments'),
+      User                  = require('./models/user');
 
+const campgroundRoutes = require('./routes/campgrounds'),
+      commentRoutes    = require('./routes/comments'),
+      authRoutes      = require('./routes/index');
+
+// CONNECT TO DATABASE
+mongoose.connect('mongodb://localhost/yelp_camp', {useNewUrlParser: true});
 
 // APP SETUP
-app.listen(3000, () => console.log('server running on port 3000'));
+
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(express.static(__dirname + "/public"));
+// ADD COOKIE SESSION FUNCTIONALITY
+app.use(require('express-session')({
+    secret: 'your mom',
+    resave: false,
+    saveUninitialized: false
+}))
 
-mongoose.connect('mongodb://localhost:3000/yelp_camp', {useNewUrlParser: true});
+// PASSPORT INITIALIZATIONS (2)
+app.use(passport.initialize());
+app.use(passport.session());
 
+// SERIALIZERS & AUTHENTICATION STRATEGIES (3)
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-// PATHS
-app.get("/", (req, res) => {
-    res.render("home");
-});
+// HAVE APP USE LOGGED IN USER INFORMATION.  This creates a local variable that is available upon rendering when the page is requested.  This code removes the requirement to send a {user:user} object to the page being rendered in order to utilize the information contained in the {user:user} object.  This local variable available for use by the client is called currentUser in this case.
+app.use((req, res, next) => {
+    // {thing for use in html} = {thing for use in javascript}
+    res.locals.currentUser = req.user;
+    next();
+ });
 
-app.get("/campgrounds", (req, res) => {
+// Since these piece of shit fucking routes are utilizing so many moving parts from app.js, they have to fucking go at the bottom of app.js or necessary shit like fucking passport.initialize() will run before they are "used" by app.js and will throw a fucking error.
+app.use("/campgrounds", campgroundRoutes);
+app.use("/campgrounds/:id/comments", commentRoutes);
+app.use(authRoutes);
 
-   res.render("campgrounds", {campsites: campsites});
-});
-
-app.get("/campgrounds/new", (req, res) => {
-    res.render("new");
-})
-
-app.post("/campgrounds", (req, res) => {
-    let name = req.body.name;
-    let image = req.body.image;
-    let newCampground = { title: name, image: image};
-    campsites.push(newCampground);
-    res.redirect("/campgrounds");
-});
-
+app.listen(3000, () => console.log('server running on port 3000'));

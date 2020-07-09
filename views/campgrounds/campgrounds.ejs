@@ -1,4 +1,4 @@
-<%- include("partials/header"); %>
+<%- include("../partials/header"); %>
 
 <div class="container">
     <header class="jumbotron">
@@ -13,21 +13,17 @@
        </div>
     </header>
 
-
-<!--     <div class="row">
-        <div class="col-lg-12">
-            <h3>Our Most Popular Campgrounds</h3>
-        </div>
-    </div> -->
-
   <div class="row text-center" style="display:flex; flex-wrap: wrap;">
-     <% campsites.forEach(campsite => { %>
+     <% allCampgrounds.forEach(campsite => { %>
         <div class="col-md-3 col-sm-6">
             <div class="thumbnail">
                 <img src="<%= campsite.image %>" />
                 <div class="caption">
-                    <h4><%= campsite.title %></h4>
+                    <h4><%= campsite.name %></h4>
                 </div>
+                <p>
+                  <a href="campgrounds/<%= campsite._id %>" class="btn btn-primary">More Info</a>
+                </p>
             </div>
         </div>
     <% }); %>   
@@ -35,4 +31,4 @@
 
 </div>
         
-<%- include("partials/footer"); %>
+<%- include("../partials/footer"); %>
