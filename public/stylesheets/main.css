@@ -1,3 +1,7 @@
 body {
-    background: purple;
+    background: rgb(95, 86, 95);
+}
+
+.inline-form {
+    display: inline;
 }

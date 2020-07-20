@@ -5,6 +5,7 @@ const express               = require('express'),
       mongoose              = require('mongoose'),
       passport              = require('passport'),
       LocalStrategy         = require('passport-local'),
+      methodOverride        = require('method-override'),
       Campground            = require('./models/campgrounds'),
       Comment               = require('./models/comments'),
       User                  = require('./models/user');
@@ -17,10 +18,11 @@ const campgroundRoutes = require('./routes/campgrounds'),
 mongoose.connect('mongodb://localhost/yelp_camp', {useNewUrlParser: true});
 
 // APP SETUP
-
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static(__dirname + "/public"));
+app.use(methodOverride('_method'));
+
 // ADD COOKIE SESSION FUNCTIONALITY
 app.use(require('express-session')({
     secret: 'your mom',
