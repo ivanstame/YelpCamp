@@ -19,9 +19,11 @@ router.post('/register', (req, res)=>{
     User.register(newUser, pWord, (err, addedUser) => {
         if(err){
             console.log(err);
+            req.flash("error", err.message);
             return res.redirect('/register');
         } else{
             passport.authenticate('local')(req, res, () => {
+                req.flash("success", "Welcome to YelpCamp " + newUser.username + "!");
                 res.redirect('/campgrounds');
             });
         }
@@ -38,13 +40,18 @@ router.post("/login",
         passport.authenticate("local", 
             {
                 successRedirect: "/campgrounds",
-                failureRedirect: "/login"
+                failureRedirect: "/login",
+                //the following is implemented to allow for a "login successful" message, as req.flash won't work
+                successFlash: "Login Successful",
+                failureFlash: true
+                
             }), 
         function(req, res){
 });
 
 router.get("/logout", (req, res) => {
     req.logout();
+    req.flash("success", "successfully logged out");
     res.redirect('/campgrounds');
 })
 

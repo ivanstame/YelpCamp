@@ -71,10 +71,10 @@ router.get("/:comment_id/edit", middleware.checkCommentAuth, (req, res) => {
 
     Comment.findById(req.params.comment_id, (err, foundComment) => {
         if(err) {
+            req.flash("error", "Comment not found");
             res.redirect("back");
         } else {
-            //remember that you have to send the campground_id and comment objects to the page being  rendered since we need to display
-            //information from those objects on the edit form itself as well as the action path the submit takes
+            //remember that you have to send the campground_id and comment objects to the page being  rendered since we need to display information from those objects on the edit form itself as well as the action path the submit takes
             res.render("comments/edit", {campground_id: req.params.id, comment: foundComment});
         }
     })
@@ -85,6 +85,7 @@ router.put("/:comment_id", middleware.checkCommentAuth, (req, res) => {
         if(err) {
             res.redirect("back")
         } else {
+            req.flash("success", "You edited a comment!");
             res.redirect("/campgrounds/" + req.params.id);
         }
     })
@@ -95,6 +96,7 @@ router.delete("/:comment_id", middleware.checkCommentAuth, (req, res) => {
         if(err) {
             res.redirect("/campgrounds/" + req.params.id)
         } else {
+            req.flash("success", "Comment Deleted");
             res.redirect("/campgrounds/" + req.params.id)
         }
     })
