@@ -1,33 +1,9 @@
 const express    = require('express');
 const router     = express.Router();
+const middleware = require('../middleware');
 const Campground = require('../models/campgrounds');
 const Comment = require('../models/comments.js');
 
-// MIDDLEWARE
-function isLoggedIn(req, res, next){
-    if(req.isAuthenticated()){
-        return next();
-    }
-    res.redirect("/login");
-}
-
-function checkAuthentication (req, res, next) {
-	if(req.isAuthenticated()){
-		Campground.findById(req.params.id, (err, foundCampground) => {
-			if(err){
-				res.redirect("back")
-			} else {
-				if(foundCampground.author.id.equals(req.user._id)){
-					next()
-				} else {
-					res.redirect("back")
-				}
-			}
-		})		
-	} else {
-		res.redirect("back");
-	}
-}
 
 //all campgrounds index page
 router.get("/", (req, res) => {
@@ -44,12 +20,12 @@ router.get("/", (req, res) => {
 });
 
 // new campground form
-router.get("/new", isLoggedIn,(req, res) => {
+router.get("/new", middleware.isLoggedIn, (req, res) => {
 	res.render("campgrounds/new");
 })
 
 // post new campground
-router.post("/", isLoggedIn, (req, res) => {
+router.post("/", middleware.isLoggedIn, (req, res) => {
 	let name = req.body.name;
 	let image = req.body.image;
 	let desc = req.body.description;
@@ -87,14 +63,14 @@ router.get("/:id", function(req, res) {
 });
 
 // edit existing campground
-router.get("/:id/edit", checkAuthentication, (req, res) => {
+router.get("/:id/edit", middleware.checkCampgroundAuth, (req, res) => {
 	Campground.findById(req.params.id, (findErr, foundCampground) => {
 			res.render("campgrounds/edit", {campground: foundCampground});
 	})
 });
 
 // put route for finalizing edit of existing campground
-router.put("/:id", checkAuthentication, (req, res) => {
+router.put("/:id", middleware.checkCampgroundAuth, (req, res) => {
 	Campground.findByIdAndUpdate(req.params.id, req.body.campground, (findErr, foundCampground) => {
 		if(findErr){
 			res.redirect("/campgrounds")
@@ -104,7 +80,7 @@ router.put("/:id", checkAuthentication, (req, res) => {
 	} )
 });
 
-router.delete("/:id", checkAuthentication, (req, res) => {
+router.delete("/:id", middleware.checkCampgroundAuth, (req, res) => {
 	Campground.findByIdAndRemove(req.params.id, (findErr, foundCampground) => {
 		if(findErr){
 			console.log(findErr);
