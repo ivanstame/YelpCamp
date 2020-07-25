@@ -22,7 +22,7 @@
             <div class="thumbnail">
                 <img class="img-responsive" src="<%= campground.image %>" />
                 <div class="caption-full">
-                    <h4 class="pull-right">$49.99</h4>
+                    <h4 class="pull-right">$<%= campground.price %> / per night</h4>
                     <h4><a href="#"><%= campground.name %></a></h4>
                     <p>
                         <%= campground.description %>
@@ -53,9 +53,9 @@
                                 <%= comment.text %>
                             </p>
                             <%  if(currentUser && comment.author.id.equals(currentUser._id)) {  %>
-                                <a class="btn btn-warning btn-xs" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id%>/edit">Edit Comment</a>
+                                <a class="btn btn-warning btn-xs" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id%>/edit">Edit</a>
                                 <form class="inline-form" action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
-                                    <button class="btn btn-danger btn-xs">Delete Comment</button>
+                                    <button class="btn btn-danger btn-xs">Delete</button>
                                 </form>
                             <%  }   %>    
                         </div>

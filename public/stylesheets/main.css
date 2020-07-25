@@ -3,3 +3,13 @@
 .inline-form {
     display: inline;
 }
+
+.btn-warning {
+    background: burlywood !important;
+    font-weight: 600;
+}
+
+.btn-danger {
+    background:  crimson !important;
+    font-weight: 600;
+}

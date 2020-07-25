@@ -1,0 +1,85 @@
+body {
+    background: black;
+}
+
+.container {
+    position: relative;
+    color: white;   
+    text-align: center;
+    padding-top: 40vh;
+    z-index: 1;
+}
+
+.headline {
+    font-size: 6.5vw;
+    font-weight: 600;
+    text-transform: capitalize;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+#slideshow {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    list-style: none;
+    z-index: 0;
+}
+
+#slideshow .slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    opacity: 0;
+    animation: imageFader 50s linear infinite;
+    
+}
+
+#slideshow li:nth-child(1){
+    background: url("https://cdn.pixabay.com/photo/2017/09/26/13/50/rv-2788677_960_720.jpg");
+    
+}
+#slideshow li:nth-child(2){
+    background: url("https://cdn.pixabay.com/photo/2016/01/26/23/32/camp-1163419_960_720.jpg");
+    animation-delay: 10s;
+}
+#slideshow li:nth-child(3){
+    background: url("https://cdn.pixabay.com/photo/2019/01/23/13/46/camping-tipi-3950296_960_720.jpg");
+    animation-delay: 20s;
+}
+#slideshow li:nth-child(4){
+    background: url("https://cdn.pixabay.com/photo/2017/11/24/03/04/tent-2974050_960_720.jpg");
+    animation-delay: 30s;
+}
+#slideshow li:nth-child(5){
+    background: url("https://cdn.pixabay.com/photo/2020/02/19/23/21/van-4863478_960_720.jpg");
+    animation-delay: 40s;
+}
+
+@keyframes imageFader {
+    /* 0 second mark */
+    0% {
+        opacity: 0;
+        animation-timing-function: ease-in;
+    }
+    /* 5 second mark */
+    10% {
+        opacity: 1;
+        animation-timing-function: ease-out;
+
+    }
+    /* 10 second mark */
+    20% {
+        opacity: 1;
+    }
+    30% {
+        opacity: 0;
+    }
+}
