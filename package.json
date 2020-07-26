@@ -4,7 +4,8 @@
   "description": "Capstone",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "author": "Ivan",
   "license": "ISC",
