@@ -16,7 +16,9 @@ const campgroundRoutes = require('./routes/campgrounds'),
       authRoutes      = require('./routes/index');
 
 // CONNECT TO DATABASE
-mongoose.connect('mongodb://localhost/yelp_camp', {useNewUrlParser: true});
+// mongoose.connect('mongodb://localhost/yelp_camp', {useNewUrlParser: true});
+mongoose.connect('mongodb+srv://ivan:nsync022@yelpcamp.xmaka.mongodb.net/yelpcamp?retryWrites=true&w=majority', {useNewUrlParser: true});
+
 
 // APP SETUP
 app.set("view engine", "ejs");
